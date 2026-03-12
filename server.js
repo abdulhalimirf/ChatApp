@@ -8,7 +8,7 @@ const server = http.createServer(app);
 const io = socketIo(server);
 
 // 1. FREE DATABASE CONNECTION (Replace with your MongoDB Atlas Link)
-const mongoURI = "mongodb+srv://YOUR_USER:YOUR_PASSWORD@cluster.mongodb.net/chatDB";
+const mongoURI = "mongodb+srv://ludbamilahirf-db-user:<db_password>@cluster0.lslwy48.mongodb.net/?appName=Cluster0mongodb+srv://ludbamilahirf-db-user:<db_password>@cluster0.lslwy48.mongodb.net/?appName=Cluster0";
 mongoose.connect(mongoURI).then(() => console.log("Database Connected"));
 
 // 2. DATABASE SCHEMA (How your messages look)

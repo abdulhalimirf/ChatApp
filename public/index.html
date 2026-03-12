@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Live Chat App</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      margin: 0;
+      background: #f0f2f5;
+    }
+    
+    #chat-box {
+      flex: 1;
+      overflow-y: scroll;
+      padding: 20px;
+    }
+    
+    .msg {
+      background: white;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      width: fit-content;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+    
+    #input-area {
+      padding: 20px;
+      background: white;
+      display: flex;
+      gap: 10px;
+    }
+    
+    input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    
+    button {
+      background: #0084ff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="chat-box"></div>
+  <form id="input-area">
+    <input id="user" placeholder="Name..." required>
+    <input id="msg" placeholder="Type a message..." required>
+    <button type="submit">Send</button>
+  </form>
+  
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    const box = document.getElementById('chat-box');
+    const form = document.getElementById('input-area');
+    
+    // Function to show message on screen
+    function displayMsg(data) {
+      const div = document.createElement('div');
+      div.className = 'msg';
+      div.innerHTML = `<b>${data.name}:</b> ${data.text}`;
+      box.appendChild(div);
+      box.scrollTop = box.scrollHeight;
+    }
+    
+    socket.on('load old msgs', (docs) => docs.forEach(displayMsg));
+    socket.on('new message', displayMsg);
+    
+    form.onsubmit = (e) => {
+      e.preventDefault();
+      const data = { name: document.getElementById('user').value, text: document.getElementById('msg').value };
+      socket.emit('send message', data);
+      document.getElementById('msg').value = '';
+    };
+  </script>
+</body>
+
+</html>
